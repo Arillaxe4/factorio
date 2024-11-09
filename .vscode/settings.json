@@ -2,6 +2,8 @@
   "files.associations": {
     "*.vert": "glsl",
     "raylib.h": "c",
-    "raymath.h": "c"
+    "raymath.h": "c",
+    "stdio.h": "c",
+    "swingable.h": "c"
   }
 }
