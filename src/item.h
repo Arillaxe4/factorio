@@ -24,11 +24,13 @@ typedef struct
   float x;
   float y;
   ItemDetails details;
+  bool isDrawn;
+  bool isPickedUp;
 } Item;
 
 Item createItem(Sprite sprite, const char *name, ItemType type, float x, float y, ItemDetails details);
 
-void renderItem(Item *item);
+void drawItem(Item *item);
 
 void updateItem(Item *item);
 

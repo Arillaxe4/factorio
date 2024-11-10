@@ -3,16 +3,19 @@
 #include <stdio.h>
 #include "globals.h"
 #include "player.h"
+#include "level.h"
+#include "item.h"
 
 Camera2D camera = {0};
 
-static void Render();
-
 Texture knightIdleTexture;
 Texture knightRunTexture;
-Texture boneWeaponsTexture;
+Texture levelTexture;
+Texture itemsTexture;
 
 Player player;
+Level level;
+Item *items;
 
 int main()
 {
@@ -26,44 +29,73 @@ int main()
   ChangeDirectory("./resources");
   knightIdleTexture = LoadTexture("./knight_idle.png");
   knightRunTexture = LoadTexture("./knight_run.png");
-  boneWeaponsTexture = LoadTexture("./bone.png");
+  levelTexture = LoadTexture("./dungeon_tiles.png");
+  itemsTexture = LoadTexture("./roguelikeitems.png");
 
-  Sprite playerSprite = createSprite(
+  Sprite playerIdleSprite = createSprite(
       &knightIdleTexture,
       (Rectangle){0, 0, 32, 32},
-      64,
-      64);
+      64, 64,
+      (Vector2){32, 32});
 
-  setSpriteAnimation(&playerSprite, 4, 0.175f);
+  Sprite playerRunSprite = createSprite(
+      &knightRunTexture,
+      (Rectangle){0, 0, 64, 64},
+      128, 128,
+      (Vector2){64, 96});
 
-  player = createPlayer(playerSprite, (Vector2){400, 225});
+  Sprite itemSprite = createSprite(
+      &itemsTexture,
+      (Rectangle){0 + 16 * 5, 0 + 16 * 6, 16, 16},
+      32, 32,
+      (Vector2){2, 30});
 
-  camera.target = player.position;
+  Swingable pickaxeSwingable = createSwingable(0.175f);
+
+  Item pickaxe = createItem(
+      itemSprite,
+      "Pickaxe",
+      ITEM_TYPE_SWINGABLE,
+      300, 200,
+      (ItemDetails){.swingable = pickaxeSwingable});
+
+  setSpriteAnimation(&playerIdleSprite, 4, 0.175f);
+  setSpriteAnimation(&playerRunSprite, 6, 0.1f);
+
+  player = createPlayer((Sprite[]){playerIdleSprite, playerRunSprite}, (Vector2){400, 225}, 40, 20);
+
+  camera.target = (Vector2){player.position.x, player.position.y};
   camera.offset = (Vector2){400, 225};
   camera.rotation = 0.0f;
   camera.zoom = .5f;
 
+  level = createDefaultLevel(&levelTexture);
+
+  addItemToLevel(&level, &pickaxe);
+  // addItem(&player, &pickaxe);
+  // setActiveItem(&player, 0);
+
   while (!WindowShouldClose())
   {
-    updatePlayer(&player);
+    updateLevel(&level);
+    updatePlayer(&player, &level);
 
-    Render();
+    BeginDrawing();
+    ClearBackground(0 ? RAYWHITE : (Color){20, 23, 28});
+    BeginMode2D(camera);
+
+    drawLevel(&level);
+
+    drawPlayer(&player);
+
+    drawItem(&pickaxe);
+
+    EndMode2D();
+    DrawFPS(10, 10);
+    EndDrawing();
   }
 
   CloseWindow();
 
   return 0;
-}
-
-static void Render()
-{
-  BeginDrawing();
-  ClearBackground(1 ? RAYWHITE : (Color){20, 23, 28});
-  BeginMode2D(camera);
-
-  drawPlayer(&player);
-
-  EndMode2D();
-  DrawFPS(10, 10);
-  EndDrawing();
 }

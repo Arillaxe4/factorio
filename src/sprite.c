@@ -1,11 +1,13 @@
 #include "sprite.h"
+#include <stdio.h>
 
-Sprite createSprite(Texture *texture, Rectangle srcRect, float w, float h)
+Sprite createSprite(Texture *texture, Rectangle srcRect, float w, float h, Vector2 origin)
 {
   Sprite sprite;
 
   sprite.texture = texture;
   sprite.srcRect = srcRect;
+  sprite.origin = origin;
 
   sprite.dstRect = (Rectangle){0, 0, w, h};
 
@@ -17,6 +19,7 @@ void setSpriteAnimation(Sprite *sprite, int maxFrames, float animationFrameDelay
   sprite->isAnimation = true;
   sprite->maxFrames = maxFrames;
   sprite->animationFrameDelay = animationFrameDelay;
+  sprite->animationTimer = animationFrameDelay;
   sprite->currentFrame = 0;
 }
 
@@ -44,7 +47,7 @@ void drawSprite(Sprite *sprite)
       *sprite->texture,
       sprite->srcRect,
       sprite->dstRect,
-      (Vector2){sprite->dstRect.width / 2, sprite->dstRect.height / 2},
+      sprite->origin,
       sprite->angle,
       WHITE);
 }

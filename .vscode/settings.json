@@ -4,6 +4,8 @@
     "raylib.h": "c",
     "raymath.h": "c",
     "stdio.h": "c",
-    "swingable.h": "c"
+    "swingable.h": "c",
+    "*.m": "c",
+    "level.h": "c"
   }
 }

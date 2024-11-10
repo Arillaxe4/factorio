@@ -1,6 +1,8 @@
 #include "item.h"
 #include "swingable.h"
 #include <string.h>
+#include "stdio.h"
+#include "raymath.h"
 
 Item createItem(Sprite sprite, const char *name, ItemType type, float x, float y, ItemDetails details)
 {
@@ -13,13 +15,18 @@ Item createItem(Sprite sprite, const char *name, ItemType type, float x, float y
   item.x = x;
   item.y = y;
   item.details = details;
+  item.isDrawn = true;
+  item.isPickedUp = false;
 
   return item;
 }
 
-void renderItem(Item *item)
+void drawItem(Item *item)
 {
+  if (!item->isDrawn)
+    return;
   drawSprite(&item->sprite);
+  // DrawRectangleLinesEx((Rectangle){item->sprite.dstRect.x - item->sprite.origin.x, item->sprite.dstRect.y - item->sprite.origin.y, item->sprite.dstRect.width, item->sprite.dstRect.height}, 3, BLUE);
 }
 
 void updateItem(Item *item)

@@ -1,4 +1,6 @@
 #include "swingable.h"
+#include "stdio.h"
+#include "raylib.h"
 
 Swingable createSwingable(float animationFrameDelay)
 {
@@ -7,6 +9,8 @@ Swingable createSwingable(float animationFrameDelay)
   swingable.animationFrameDelay = animationFrameDelay;
   swingable.animationTimer = 0;
   swingable.animationAngle = 0;
+
+  return swingable;
 }
 
 void updateSwingable(Swingable *swingable)
@@ -17,7 +21,7 @@ void updateSwingable(Swingable *swingable)
 
     swingable->animationTimer -= frameTime;
     float progress = (swingable->animationFrameDelay - swingable->animationTimer) / swingable->animationFrameDelay;
-    swingable->animationAngle = (progress * progress * progress) * SWINGABLE_ANGE_MAX;
+    swingable->animationAngle = progress * SWINGABLE_ANGE_MAX;
   }
   else
   {
@@ -27,5 +31,8 @@ void updateSwingable(Swingable *swingable)
 
 void swingSwingable(Swingable *swingable)
 {
-  swingable->animationTimer = swingable->animationFrameDelay;
+  if (swingable->animationTimer <= 0)
+  {
+    swingable->animationTimer = swingable->animationFrameDelay;
+  }
 }

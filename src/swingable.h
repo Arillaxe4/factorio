@@ -1,7 +1,7 @@
 #ifndef SWINGABLE_H
 #define SWINGABLE_H
 
-#define SWINGABLE_ANGE_MAX 120
+#define SWINGABLE_ANGE_MAX 60
 
 typedef struct
 {
@@ -9,7 +9,6 @@ typedef struct
 
   float animationTimer;
   float animationAngle;
-  float bobValue;
 } Swingable;
 
 Swingable createSwingable(float animationFrameDelay);

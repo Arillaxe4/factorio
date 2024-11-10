@@ -3,30 +3,42 @@
 
 #include "raylib.h"
 #include "sprite.h"
+#include "level.h"
+#include "item.h"
 
 #define WALKING_SPEED 500.f
-#define WEAPON_SPEED .13f
-#define WEAPON_ANGLE_MAX 120
 
 typedef enum
 {
-  PLAYER_STATE_IDLE,
-  PLAYER_STATE_WALKING,
+  PLAYER_STATE_IDLE = 0,
+  PLAYER_STATE_WALKING = 1,
 } PlayerState;
 
 typedef struct
 {
-  Sprite sprite;
+  Sprite *sprite;
+  Sprite *sprites;
   Vector2 position;
   Vector2 velocity;
   bool isLookingRight;
   PlayerState state;
   PlayerState previousState;
+  Rectangle collider;
+  Item **items;
+  Item *activeItem;
+  int itemsCount;
+  int maxItems;
 } Player;
 
-Player createPlayer(Sprite sprite, Vector2 position);
-void updatePlayer(Player *player);
+Player createPlayer(Sprite *sprites, Vector2 position, float w, float h);
+void setPlayerSprite(Player *player, Sprite sprite);
+void updatePlayer(Player *player, Level *level);
 void handlePlayerInputs(Player *player);
 void drawPlayer(Player *player);
+
+void addItemToPlayer(Player *player, Item *item);
+void setActiveItem(Player *player, int slotId);
+
+bool checkAABBCollision(Rectangle a, Rectangle b);
 
 #endif // PLADYER_H
