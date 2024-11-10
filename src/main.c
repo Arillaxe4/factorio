@@ -5,6 +5,7 @@
 #include "player.h"
 #include "level.h"
 #include "item.h"
+#include "inventory.h"
 
 Camera2D camera = {0};
 
@@ -12,6 +13,8 @@ Texture knightIdleTexture;
 Texture knightRunTexture;
 Texture levelTexture;
 Texture itemsTexture;
+Texture panelTexture;
+Texture slotTexture;
 
 Player player;
 Level level;
@@ -31,6 +34,8 @@ int main()
   knightRunTexture = LoadTexture("./knight_run.png");
   levelTexture = LoadTexture("./dungeon_tiles.png");
   itemsTexture = LoadTexture("./roguelikeitems.png");
+  panelTexture = LoadTexture("./panel.png");
+  slotTexture = LoadTexture("./slot.png");
 
   Sprite playerIdleSprite = createSprite(
       &knightIdleTexture,
@@ -75,8 +80,11 @@ int main()
   // addItem(&player, &pickaxe);
   // setActiveItem(&player, 0);
 
+  Inventory inventory = createInventory(&panelTexture, &slotTexture);
+
   while (!WindowShouldClose())
   {
+    handleInventoryInput(&inventory);
     updateLevel(&level);
     updatePlayer(&player, &level);
 
@@ -91,6 +99,9 @@ int main()
     drawItem(&pickaxe);
 
     EndMode2D();
+
+    drawInventory(&inventory, player.items);
+
     DrawFPS(10, 10);
     EndDrawing();
   }

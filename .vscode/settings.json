@@ -6,6 +6,7 @@
     "stdio.h": "c",
     "swingable.h": "c",
     "*.m": "c",
-    "level.h": "c"
+    "level.h": "c",
+    "inventory.h": "c"
   }
 }

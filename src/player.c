@@ -153,7 +153,7 @@ void handlePlayerInputs(Player *player)
 
 	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 	{
-		if (player->activeItem->type == ITEM_TYPE_SWINGABLE)
+		if (player->activeItem != 0 && player->activeItem->type == ITEM_TYPE_SWINGABLE)
 		{
 			swingSwingable(&player->activeItem->details.swingable);
 		}
